@@ -1,0 +1,7 @@
+DNS Records
+---------------------
+Get-DnsRecord -RecordType A -ZoneName FQDN -Server ServerName
+
+Get-WmiObject -Namespace Root\MicrosoftDNS -Query "SELECT * FROM MicrosoftDNS_AType WHERE ContainerName='domain.com'"
+---------------------------
+
