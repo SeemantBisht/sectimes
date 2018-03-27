@@ -1,0 +1,3 @@
+Sharphound.exe 
+Sharphound.exe -c SessionLoop
+Get-NetSession -computername WIN2k-DC
