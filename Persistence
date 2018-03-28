@@ -1,0 +1,8 @@
+
+Persistance Survivability to be used during the pentest to find the hosts which we can use for persistence.
+https://github.com/killswitch-GUI/Persistence-Survivability
+
+For Servers 2008, 2012, 2016 
+Persistence through Diskshadow and extraction of NTDS.dit
+https://bohops.com/2018/03/26/diskshadow-the-return-of-vss-evasion-persistence-and-active-directory-database-extraction/
+
