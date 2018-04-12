@@ -1,0 +1,7 @@
+"PowerShell retrieval of the security descriptor binary blob for the “admin” user, containing the
+owner and DACL information for the object."
+
+$Searcher = New-Object System.DirectoryServices.DirectorySearcher('(samaccountname=admin)')
+$Searcher.SecurityMasks = [System.DirectoryServices.SecurityMasks]::Dacl -bor [System.DirectoryServices.SecurityMasks]::owner
+$Result = $Searcher.FindOne()       \\* This needs connectivity to Domain Controller
+$Result.Properties.ntsecuritydescriptor[0].gettype()
