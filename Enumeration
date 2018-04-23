@@ -8,6 +8,8 @@ runas /noprofile /netonly /user:domain\user PowerShell.exe
 Import-Module .\Sharphound.ps1
 Invoke-Bloodhound -v -Domain seemant.bisht.local
 
+goddi-windows-amd64.exe -username=juser -password="Fall2017!" -domain="demo.local" -dc="10.2.9.220" -unsafe
+
 
 
 
