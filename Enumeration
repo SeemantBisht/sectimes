@@ -1,3 +1,18 @@
 Sharphound.exe 
 Sharphound.exe -c SessionLoop
 Get-NetSession -computername WIN2k-DC
+
+From a non domain system but with an enumerated domain credential (Low privilege)
+
+runas /noprofile /netonly /user:domain\user PowerShell.exe
+Import-Module .\Sharphound.ps1
+Invoke-Bloodhound -v -Domain seemant.bisht.local
+
+
+
+
+Get-SQLInstanceDomain -Verbose -Username 'Domain_name\User_Name' -Password 'Password@123' -DomainController 10.100.100.3 | Get-SQLConnectionTestThreaded -Verbose -Threads 15
+
+runas /noprofile /netonly /user:domain\user PowerShell.exe
+import-module PowerUpSQL.psd1
+Get-SQLInstanceDomain -Verbose -DomainController 192.168.1.1 -Username domain\user -password P@ssword123
