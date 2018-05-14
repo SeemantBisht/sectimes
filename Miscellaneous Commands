@@ -1,4 +1,30 @@
+Accessing SMB shares through powershell
 
+1.  Get-Content .\file.txt | forEach-Object {Get-SMBShare -ScopeName $_}
+
+2.  For ($i=1;1..254;$i++) {Get-SMBShare -ScopeName ("10.100.100." + $i)} 
+
+3.  Get-SmbShareAccess -ScopeName "GCOPRN04" | Format-List
+
+4.  For ($i=1;1..254;$i++) {$shares = net view \\10.100.100.$i /all | select -Skip 7 | ?{$_ -match 'disk*'} | %{$_ -match '^(.+?)\s+Disk*'|out-null;$matches[1]}}
+
+5.  For ($i=1;1..254;$i++) {Write-Host ("[*} 10.100.100." + $i); Get-WmiObject -class win32_share -ComputerName ("10.100.100." + $i)}
+
+6.  $UserName = "domain_name\seemant"; $sec_password = "Password@123"; $Credentials = New-Object System.Management.Automation.PSCredential -ArgumentList $UserName, $sec_password; For ($i=1;1..254;$i++) {Write-Host ("[*} 10.100.100." + $i); Get-WmiObject -class win32_share -credential $Credentials -ComputerName ("10.100.100." + $i)}
+
+7.  Copy the content in .ps1 and run:
+
+$b = 1..254 #Decide last octet range
+
+foreach ($i in $b) {
+    $IPAddress = "192.168.81." + $i #here you will need to change the value for first three octet
+    if (Test-Connection $IPAddress -Count 1 -ErrorAction SilentlyContinue){
+        write-host $IPAddress | Out-File -Append Result.txt
+        get-WmiObject -class Win32_Share -computer $IPAddress | Out-File -Append Result.txt
+    }
+}
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Payload Cradle
 ---------------
 SCT Launch Execution Reflection.Assembly Via ( Microsoft.JScript )
