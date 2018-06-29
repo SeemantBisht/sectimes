@@ -1,0 +1,108 @@
+First steps:
+Is there an AD Domain here?
+What is its name?
+Where are the Domain Controllers?
+What AD Computers can you reach?
+
+1. Fire up Wireshark before you plug in!
+2. nmap --script broadcast-dhcp-discover
+...............................................................................................
+Find AD-DS through DNS
+AD-DS relies on SRV records for service discovery. Most useful and common ones:
+• _gc._tcp – global catalog (LDAP for entire forest)
+• _ldap._tcp – ldap servers
+• _kerberos._tcp – Kerberos KDC
+• _kpasswd._tcp – Kerberos password change server
+
+dig -t SRV _gc._tcp.lab.ropnop.com
+dig -t SRV _ldap._tcp.lab.ropnop.com
+dig -t SRV _kerberos._tcp.lab.ropnop.com
+dig -t SRV _kpasswd._tcp.lab.ropnop.com
+nmap --script dns-srv-enum --script-args “dns-srv-enum.domain=‘lab.ropnop.com’”
+.................................................................................................
+Domain Meta-Data Through LDAP
+Once LDAP servers are discovered, we can query for some “metadata” about the domain through LDAP
+• LDAP allows a few unauthenticated operations - to discover functionality levels
+• To actually retrieve LDAP data, you usually have to be authenticated
+• Anonymous binds are sometimes enabled though - worth checking!
+
+ldapsearch -LLL -x -H ldap://pdc01.lab.ropnop.com -b '' -s base '(objectclass=*)'
+..................................................................................................
+Finding Hosts with NetBIOS
+• AD uses NetBIOS over TCP (NBT) as a fallback and for legacy systems
+• Can query name information about hosts with NBT Name Service -
+including reverse lookups (IP -> Name)
+
+nbtscan 172.16.13.13
+nbtscan -r 172.16.13.0/24
+......................................................................................................
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ldapsearch -LLL -x -H ldap://pdc01.lab.ropnop.com -D "thoffman@lab.ropnop.com" -w Summer2017 -b dc=lab,dc=ropnop,dc=com "(objectClass=user)" sAMAccountName
+userPrincipalName memberOf | tee domain_users.lst
+
+ldapsearch -LLL -x -H ldap://pdc01.lab.ropnop.com -D "thoffman@lab.ropnop.com" -w Summer2017 -b dc=lab,dc=ropnop,dc=com "(objectClass=group)" sAMAccountName member
+memberOf | tee domain_groups.lst
+
+ldapsearch -LLL -x -H ldap://pdc01.lab.ropnop.com -D "thoffman@lab.ropnop.com" -w Summer2017 -b dc=lab,dc=ropnop,dc=com "(objectClass=computer)" name dNSHostname
+operatingSystem operatingSystemVersion lastLogonTimestamp servicePrincipalName | tee domain_computers.lst
+
+Note: if you get “Size Limit Exceeded”, add the paging option: -E pr=1000/noprompt
+
+Microsoft added some useful “extensions” to LDAP through OIDs
+• “LDAP_MATCHING_RULE_IN_CHAIN” can perform recursive lookups
+• OID: 1.2.840.113556.1.4.1941
+• Chain that with memberOf to get nested memberships for
+users/groups!
+
+ldapsearch -LLL -x -H ldap://pdc01.lab.ropnop.com -D "thoffman@lab.ropnop.com" -w Summer2017 -b dc=lab,dc=ropnop,dc=com
+"(&(objectClass=user)(memberof:1.2.840.113556.1.4.1941:=CN=Domain Admins,CN=Users,DC=LAB,DC=ROPNOP,DC=COM))"
+
+
+
+Find SPNs (for Kerberoasting)
+ldapsearch -LLL -x -H ldap://pdc01.lab.ropnop.com -D "thoffman@lab.ropnop.com" -W -b "dc=lab,dc=ropnop,dc=com“ "(&(&(servicePrincipalName=*)(UserAccountControl:1.2.840.113556.1.4.803:=512))(!(Us
+erAccountControl:1.2.840.113556.1.4.803:=2)))"
+
+Find users and computers with unconstrained delegation
+ldapsearch -LLL -x -H ldap://pdc01.lab.ropnop.com -D "thoffman@lab.ropnop.com" -W -b "dc=lab,dc=ropnop,dc=com" "(&((objectCategory=person)(objectClass=user))(userAccountControl:1.2.840.113556.1.4.803:=5
+24288))"
+
+ldapsearch -LLL -x -H ldap://pdc01.lab.ropnop.com -D "thoffman@lab.ropnop.com" -W -b "dc=lab,dc=ropnop,dc=com" "(&(objectCategory=computer)(objectClass=computer)(userAccountControl:1.2.840.113556.1.4.80
+3:=524288))"
+
+• Computers with Protocol Transition
+ldapsearch -LLL -x -H ldap://pdc01.lab.ropnop.com -D "thoffman@lab.ropnop.com" -W -b "dc=lab,dc=ropnop,dc=com“ "(&(objectCategory=computer)(objectClass=computer)(userAccountControl:1.2.840.113556.1.4.80
+3:=16777216))"
+
+Find GPO names and locations
+ldapsearch -LLL -x -H ldap://pdc01.lab.ropnop.com -D "thoffman@lab.ropnop.com" -w Summer2017 -b dc=lab,dc=ropnop,dc=com "objectClass=groupPolicyContainer" displayName gPCFileSysPath
+
+
+
+./GetUserSPNs.py -request lab.ropnop.com/thoffman:Summer2017
