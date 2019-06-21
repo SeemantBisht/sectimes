@@ -40,3 +40,12 @@ Invoke-LyncSpray –userlist users.txt –password Welcome1 –AutoDiscoverURL �
 5. Identify publicly accessible VPN portals to get inside the network.
 
 
+References:
+https://www.blackhillsinfosec.com/red-teaming-microsoft-part-1-active-directory-leaks-via-azure/
+https://blog.netspi.com/enumerating-azure-services/
+https://blog.netspi.com/get-azurepasswords/
+https://github.com/mwrlabs/Azurite
+https://github.com/nccgroup/azucar
+https://github.com/NetSPI/MicroBurst
+https://github.com/chrismaddalena/SharpCloud
+
