@@ -1,0 +1,30 @@
+.......................................................................................................................................
+
+Removing Exchange Trusted Subsystem group from the Exchange Windows Permissions group:
+
+Remove the Exchange Trusted Subsystem group from the Exchange Windows Permissions group and any other groups that are members of Exchange Windows Permissions group. This isolates Exchange from having AD permissions.
+
+Ensure that only Exchange Servers are members in the Exchange Trusted Subsystem group.
+
+
+Patch: KB4490059
+
+.......................................................................................................................................
+
+Configuring SPLIT permissions:
+
+https://sourcedaddy.com/windows-7/configuring-exchange-server-2010-split-permissions.html
+
+http://techgenix.com/managing-exchange-server-2010-active-directory-split-permissions/
+
+https://dominikhoefling.com/2014/09/08/exchange-permissions-model/
+
+https://practical365.com/exchange-server/exchange-server-role-based-access-control-in-action/
+
+https://docs.microsoft.com/en-us/exchange/understanding-split-permissions-exchange-2013-help
+.........................................................................................................................................
+
+
+
+Removing WriteDACL permissions from Exchange Enterprise Servers Group to Exchange Permissions Group
+https://docs.microsoft.com/en-us/previous-versions/office/exchange-server-analyzer/ee428169(v=exchg.80)?redirectedfrom=MSDN
